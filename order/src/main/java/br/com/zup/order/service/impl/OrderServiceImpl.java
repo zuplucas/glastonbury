@@ -34,8 +34,7 @@ public class OrderServiceImpl implements OrderService {
                 request.getAmount(),
                 request.getItems()
                         .stream()
-                        .map(CreateOrderRequest.OrderItemPart::getId)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toMap(CreateOrderRequest.OrderItemPart::getId, CreateOrderRequest.OrderItemPart::getQuantity))
         );
 
         this.template.send("created-orders", event);
