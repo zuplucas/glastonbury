@@ -13,6 +13,7 @@ public class PaymentService {
     private Random random = new Random();
 
     public void pay(String customerId, BigDecimal amount) {
+        // validação de pagamento randomica, nao foi implementado realmente o pagamento
         final boolean hasCredit = random.nextBoolean();
         System.out.println("Requiring payment - " + customerId + " - " + amount + " - " + hasCredit);
 

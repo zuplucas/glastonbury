@@ -22,6 +22,9 @@ public class TicketReserveService {
 
     @Transactional
     public synchronized void reserveTickets(Map<String, Integer> orderEntry) {
+        /// precisa inserir os tickets ids no banco antes de solicitar uma compra,
+        // pois ao reiniciar a aplicação os dados serão perdidos
+
         final List<TicketInventory> tickets = ticketInventoryRepository.findAllByTicketIdIn(orderEntry.keySet());
 
         for (String ticketId: orderEntry.keySet()) {
@@ -41,5 +44,10 @@ public class TicketReserveService {
         }
 
         ticketInventoryRepository.saveAll(tickets);
+    }
+
+    @Transactional
+    public synchronized void rollbackBookedTickets(Map<String, Integer> orderEntry) {
+        // return the tickets to inventory
     }
 }
