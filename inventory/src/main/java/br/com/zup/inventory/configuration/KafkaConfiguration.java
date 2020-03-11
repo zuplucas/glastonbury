@@ -1,5 +1,7 @@
 package br.com.zup.inventory.configuration;
 
+import br.com.zup.inventory.event.OrderCreatedEvent;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,14 +12,21 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 public class KafkaConfiguration {
 
-    @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrap;
+    private ObjectMapper objectMapper;
+
+    public KafkaConfiguration(@Value(value = "${spring.kafka.bootstrap-servers}") String bootstrap,
+                              ObjectMapper objectMapper) {
+        this.bootstrap = bootstrap;
+        this.objectMapper = objectMapper;
+    }
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
@@ -38,7 +47,8 @@ public class KafkaConfiguration {
     }
 
     @KafkaListener(topics = "created-orders", groupId = "inventory-group-id")
-    public void listen(String message) {
-        System.out.println("Received event: " + message);
+    public void listen(String message) throws IOException {
+        OrderCreatedEvent event = this.objectMapper.readValue(message, OrderCreatedEvent.class);
+        System.out.println("Received event: " + event.getCustomerId());
     }
 }

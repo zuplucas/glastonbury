@@ -2,7 +2,6 @@ package br.com.zup.order.service.impl;
 
 import br.com.zup.order.controller.request.CreateOrderRequest;
 import br.com.zup.order.controller.response.OrderResponse;
-import br.com.zup.order.event.Message;
 import br.com.zup.order.event.OrderCreatedEvent;
 import br.com.zup.order.repository.OrderRepository;
 import br.com.zup.order.service.OrderService;
@@ -17,10 +16,10 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private OrderRepository orderRepository;
-    private KafkaTemplate<String, Message<OrderCreatedEvent>> template;
+    private KafkaTemplate<String, OrderCreatedEvent> template;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, KafkaTemplate<String, Message<OrderCreatedEvent>> template) {
+    public OrderServiceImpl(OrderRepository orderRepository, KafkaTemplate<String, OrderCreatedEvent> template) {
         this.orderRepository = orderRepository;
         this.template = template;
     }
@@ -39,9 +38,7 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.toList())
         );
 
-        Message<OrderCreatedEvent> message = new Message<>(event);
-
-        this.template.send("created-orders", message);
+        this.template.send("created-orders", event);
 
         return orderId;
     }

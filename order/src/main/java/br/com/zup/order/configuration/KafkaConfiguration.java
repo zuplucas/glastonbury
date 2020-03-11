@@ -1,6 +1,5 @@
 package br.com.zup.order.configuration;
 
-import br.com.zup.order.event.Message;
 import br.com.zup.order.event.OrderCreatedEvent;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -49,8 +48,8 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, Message<OrderCreatedEvent>> messageKafkaTemplate() {
-        return new KafkaTemplate<String, Message<OrderCreatedEvent>>(messageProducerFactory());
+    public KafkaTemplate<String, OrderCreatedEvent> messageKafkaTemplate() {
+        return new KafkaTemplate<String, OrderCreatedEvent>(messageProducerFactory());
     }
 
     @Bean

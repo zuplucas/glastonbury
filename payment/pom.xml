@@ -6,7 +6,6 @@
         <artifactId>glastonbury</artifactId>
         <groupId>br.com.zup</groupId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <artifactId>payment</artifactId>
     <version>0.0.1-SNAPSHOT</version>
